@@ -8,13 +8,13 @@ import { ReceiptsRepository } from './receipts.repository';
 export class ReceiptsService {
     constructor(private readonly receiptsRepository: ReceiptsRepository) {}
 
-    create(createReceiptDto: CreateReceiptDto): Pick<Receipt, 'id'> {
+    createReceipt(createReceiptDto: CreateReceiptDto): Pick<Receipt, 'id'> {
         const confirmation = this.receiptsRepository.create(createReceiptDto);
 
         return confirmation;
     }
 
-    findOne(id: Receipt['id']): Receipt | undefined {
+    findOneReceipt(id: Receipt['id']): Receipt | undefined {
         const queriedReceipt = this.receiptsRepository.findOne(id);
 
         return queriedReceipt;

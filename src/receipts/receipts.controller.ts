@@ -41,13 +41,13 @@ export class ReceiptsController {
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
     processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
-        const createdReceiptId = this.receiptsService.create(createReceiptDto);
+        const createdReceiptId = this.receiptsService.createReceipt(createReceiptDto);
 
         if (!createdReceiptId) {
             throw new HttpException(RECEIPT_EXISTS, HttpStatus.BAD_REQUEST);
         }
 
-        return this.receiptsService.create(createReceiptDto);
+        return this.receiptsService.createReceipt(createReceiptDto);
     }
 
     @ApiOperation({
@@ -82,7 +82,7 @@ export class ReceiptsController {
     @ApiNotFoundResponse({ description: RECEIPT_NOT_FOUND })
     @Get(':id/points')
     getPointsAwarded(@Param('id') id: Receipt['id']) {
-        const receipt = this.receiptsService.findOne(id);
+        const receipt = this.receiptsService.findOneReceipt(id);
 
         if (!receipt) {
             throw new HttpException(RECEIPT_NOT_FOUND, HttpStatus.NOT_FOUND);
