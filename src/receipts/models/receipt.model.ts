@@ -7,7 +7,3 @@ export type Receipt = {
     purchaseTime: string;
     items: Item[];
 };
-
-export type ReceiptWithPoints = Receipt & {
-    points: number | undefined;
-};
