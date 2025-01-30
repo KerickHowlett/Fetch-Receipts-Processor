@@ -1,15 +1,19 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-
-import { CreateReceiptDto } from './dto/create-receipt.dto';
-
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
-    ApiConsumes,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
 } from '@nestjs/swagger';
 import type { ParameterObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+
+import {
+    INVALID_RECEIPT,
+    RECEIPT_EXISTS,
+    RECEIPT_NOT_FOUND,
+} from './constants/error-messages.const';
+import { CreateReceiptDto } from './dto/create-receipt.dto';
+import type { Receipt } from './models/receipt.model';
 import { ReceiptsService } from './receipts.service';
 
 @Controller('receipts')
@@ -20,7 +24,6 @@ export class ReceiptsController {
         summary: 'Submits a receipt for processing.',
         description: 'Submits a receipt for processing.',
     })
-    @ApiConsumes('application/json')
     @ApiOkResponse({
         description: 'Returns the ID assigned to the receipt.',
         schema: {
@@ -35,9 +38,15 @@ export class ReceiptsController {
             },
         },
     })
-    @ApiBadRequestResponse({ description: 'The receipt is invalid.' })
+    @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
     processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
+        const createdReceiptId = this.receiptsService.create(createReceiptDto);
+
+        if (!createdReceiptId) {
+            throw new HttpException(RECEIPT_EXISTS, HttpStatus.BAD_REQUEST);
+        }
+
         return this.receiptsService.create(createReceiptDto);
     }
 
@@ -70,9 +79,15 @@ export class ReceiptsController {
             },
         },
     })
-    @ApiNotFoundResponse({ description: 'No receipt found for that ID.' })
+    @ApiNotFoundResponse({ description: RECEIPT_NOT_FOUND })
     @Get(':id/points')
-    getPointsAwarded(@Param('id') id: string) {
-        return this.receiptsService.findOne(+id);
+    getPointsAwarded(@Param('id') id: Receipt['id']) {
+        const receipt = this.receiptsService.findOne(id);
+
+        if (!receipt) {
+            throw new HttpException(RECEIPT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        return receipt;
     }
 }

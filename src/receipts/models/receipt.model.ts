@@ -1,7 +1,7 @@
 import type { Item } from './item.model';
 
 export type Receipt = {
-    id: number;
+    id: string;
     retailer: string;
     purchaseDate: Date;
     purchaseTime: string;

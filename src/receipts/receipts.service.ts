@@ -1,27 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
 import { CreateReceiptDto } from './dto/create-receipt.dto';
-import { UpdateReceiptDto } from './dto/update-receipt.dto';
+import type { Receipt } from './models/receipt.model';
+import { ReceiptsRepository } from './receipts.repository';
 
 @Injectable()
 export class ReceiptsService {
-    create(createReceiptDto: CreateReceiptDto) {
-        return 'This action adds a new receipt';
+    constructor(private readonly receiptsRepository: ReceiptsRepository) {}
+
+    create(createReceiptDto: CreateReceiptDto): Pick<Receipt, 'id'> {
+        const confirmation = this.receiptsRepository.create(createReceiptDto);
+
+        return confirmation;
     }
 
-    findAll() {
-        return `This action returns all receipts`;
-    }
+    findOne(id: Receipt['id']): Receipt | undefined {
+        const queriedReceipt = this.receiptsRepository.findOne(id);
 
-    findOne(id: number) {
-        return `This action returns a #${id} receipt`;
-    }
-
-    update(id: number, updateReceiptDto: UpdateReceiptDto) {
-        return `This action updates a #${id} receipt`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} receipt`;
+        return queriedReceipt;
     }
 }
