@@ -33,6 +33,7 @@ export class CreateReceiptDto {
     @ApiProperty({
         minimum: 1,
         required: true,
+        type: 'array',
     })
     items: CreateItemDto[];
 
