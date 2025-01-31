@@ -28,7 +28,7 @@ export class CreateReceiptDto {
 
     @IsString()
     @IsNotEmpty()
-    @Matches(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/)
+    @Matches(/^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/)
     @ApiProperty({
         description: 'The date of the purchase printed on the receipt.',
         example: '2022-01-01',
