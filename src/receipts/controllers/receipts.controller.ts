@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
     ApiNotFoundResponse,
@@ -7,11 +7,15 @@ import {
 } from '@nestjs/swagger';
 import type { ParameterObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
-import { INVALID_RECEIPT, RECEIPT_EXISTS, RECEIPT_NOT_FOUND } from '../constants/receipts.const';
+import {
+    INVALID_RECEIPT,
+    RECEIPT_NOT_FOUND,
+    RECEIPT_NOT_FOUND_EXCEPTION,
+} from '../constants/receipts.const';
 import { CreateReceiptDto } from '../dto/create-receipt.dto';
 import type { Receipt } from '../models/receipt.model';
-import type { PointsService } from '../services/points.service';
-import type { ReceiptsService } from '../services/receipts.service';
+import { PointsService } from '../services/points.service';
+import { ReceiptsService } from '../services/receipts.service';
 
 @Controller('receipts')
 export class ReceiptsController {
@@ -41,13 +45,9 @@ export class ReceiptsController {
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
     processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
-        const createdReceiptId = this.receiptsService.createReceipt(createReceiptDto);
+        const id = this.receiptsService.createReceipt(createReceiptDto);
 
-        if (!createdReceiptId) {
-            throw new HttpException(RECEIPT_EXISTS, HttpStatus.BAD_REQUEST);
-        }
-
-        return this.receiptsService.createReceipt(createReceiptDto);
+        return { id };
     }
 
     @ApiOperation({
@@ -85,7 +85,7 @@ export class ReceiptsController {
         const receipt = this.receiptsService.findOneReceipt(id);
 
         if (!receipt) {
-            throw new HttpException(RECEIPT_NOT_FOUND, HttpStatus.NOT_FOUND);
+            throw RECEIPT_NOT_FOUND_EXCEPTION;
         }
 
         let points = 0;

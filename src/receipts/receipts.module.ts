@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ReceiptsController } from './controllers/receipts.controller';
-import { ReceiptsRepository } from './repositories/receipts.in-memory.repository.repository';
+import { ReceiptsRepository } from './repositories/receipts.in-memory.repository';
 import { PointsService } from './services/points.service';
 import { ReceiptsService } from './services/receipts.service';
 

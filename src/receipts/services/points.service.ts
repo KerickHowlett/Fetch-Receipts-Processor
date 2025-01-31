@@ -15,7 +15,6 @@ export class PointsService {
      */
     applyRetailerNameAlphaNumCharsRule(retailerName: Receipt['retailer']): number {
         const alphaNumChars = retailerName.replace(/[^a-zA-Z0-9]/g, '');
-
         return alphaNumChars.length;
     }
 
@@ -91,7 +90,7 @@ export class PointsService {
             const itemDescriptionLength = item.shortDescription.trim().length;
 
             const isMultipleOfThree = itemDescriptionLength % 3 === 0;
-            if (isMultipleOfThree) {
+            if (!isMultipleOfThree) {
                 return totalPoints;
             }
 
@@ -109,6 +108,7 @@ export class PointsService {
      */
     applyPurchaseDateDayRule(purchaseDate: Receipt['purchaseDate']): number {
         const day = purchaseDate.getDate();
+        console.log(day);
 
         const isDayEvenNumber = day % 2 === 0;
         if (isDayEvenNumber) {
@@ -130,14 +130,24 @@ export class PointsService {
         const TWO_PM = 14;
         const FOUR_PM = 16;
 
-        const hour = +purchaseTime.split(':')[0];
+        const [hour, minute] = purchaseTime.split(':').map(Number);
 
-        const isWithinHourRange = hour > TWO_PM && hour < FOUR_PM;
-        if (isWithinHourRange) {
-            const AWARDED_POINTS = 6;
-            return AWARDED_POINTS;
+        const isOutsideHourRange = hour < TWO_PM || hour > FOUR_PM;
+        if (isOutsideHourRange) {
+            return NO_POINTS;
         }
 
-        return NO_POINTS;
+        // NOTE: Based on how the Rule's specific wording in the README file,
+        //       I'm assuming both 2:00pm and 4:00pm are to be considered
+        //       exclusive to the defined time range.
+        //       If this assumption is incorrect, however, just comment out or
+        //       outright remove the below if-statement.
+        const isOnTheBorderingHour = (hour === TWO_PM || hour === FOUR_PM) && minute === 0;
+        if (isOnTheBorderingHour) {
+            return NO_POINTS;
+        }
+
+        const AWARDED_POINTS = 10;
+        return AWARDED_POINTS;
     }
 }

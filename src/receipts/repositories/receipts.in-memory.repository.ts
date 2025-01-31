@@ -5,15 +5,13 @@ import type { Receipt } from '../models/receipt.model';
 
 @Injectable()
 export class ReceiptsRepository {
-    constructor(private readonly receipts: Map<Receipt['id'], Receipt>) {}
+    private readonly receipts: Map<Receipt['id'], Receipt> = new Map();
 
-    create(receipt: Omit<Receipt, 'id'>): Pick<Receipt, 'id'> | undefined {
+    create(receipt: Omit<Receipt, 'id'>): Receipt['id'] {
         const id = uuid() as Receipt['id'];
+        this.receipts.set(id, { ...receipt, id } as const);
 
-        if (this.receipts.has(id)) return;
-        this.receipts.set(id, { ...receipt, id });
-
-        return { id };
+        return id;
     }
 
     findOne(id: Receipt['id']): Receipt | undefined {
