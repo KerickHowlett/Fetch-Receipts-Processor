@@ -6,4 +6,5 @@ export type Receipt = {
     purchaseDate: Date;
     purchaseTime: string;
     items: Item[];
+    total: number;
 };
