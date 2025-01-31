@@ -10,7 +10,7 @@ jest.mock('uuid', () => ({
 
 const MOCK_RECEIPT: Omit<Receipt, 'id'> = {
     retailer: 'Target',
-    purchaseDate: new Date('2022-01-01'),
+    purchaseDate: '2022-01-01',
     purchaseTime: '12:00',
     items: [
         {

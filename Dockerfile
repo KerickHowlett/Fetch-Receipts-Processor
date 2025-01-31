@@ -3,22 +3,21 @@
 # Build the docker image with `npx nx docker-build fetch`.
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
-# Run the container with `docker run -p 3000:3000 -t fetch`.
+# Run the container with `docker run -p 4000:4000 -t fetch`.
 FROM docker.io/node:lts-alpine
 
 ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV PORT=4000
 
 WORKDIR /app
 
 RUN addgroup --system fetch && \
-          adduser --system -G fetch fetch
+    adduser --system -G fetch fetch
 
 COPY dist/fetch fetch/
-RUN chown -R fetch:fetch .
-
-# You can remove this install step if you build with `--bundle` option.
-# The bundled output will include external dependencies.
-RUN npm --prefix fetch --omit=dev -f install
+RUN chown -R fetch:fetch . \
+    # You can remove this install step if you build with `--bundle` option.
+    # The bundled output will include external dependencies.
+    && npm --prefix fetch --omit=dev -f install --legacy-peer-deps
 
 CMD [ "node", "fetch" ]

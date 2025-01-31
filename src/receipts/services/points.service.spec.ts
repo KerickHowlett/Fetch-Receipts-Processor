@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { NO_POINTS } from '../constants/receipts.const';
 import type { Item } from '../models/item.model';
+import type { PurchaseDate, PurchaseTime } from '../types';
 import { PointsService } from './points.service';
 
 describe('PointsService', () => {
@@ -197,15 +198,15 @@ describe('PointsService', () => {
 
         it.each([
             {
-                purchaseDate: new Date('01-01-2025'),
+                purchaseDate: '2025-01-01',
                 expected: AWARDED_POINTS,
             },
             {
-                purchaseDate: new Date('01-02-2025'),
+                purchaseDate: '2025-01-02',
                 expected: NO_POINTS,
             },
         ])('', ({ purchaseDate, expected }) => {
-            const points = service.applyPurchaseDateDayRule(purchaseDate);
+            const points = service.applyPurchaseDateDayRule(purchaseDate as PurchaseDate);
             expect(points).toEqual(expected);
         });
     });
@@ -241,7 +242,7 @@ describe('PointsService', () => {
         ])(
             'should calculate points based on whether the purchase time is within 2pm and 4pm',
             ({ purchaseTime, expected }) => {
-                const points = service.applyPurchaseTimeRangeRule(purchaseTime);
+                const points = service.applyPurchaseTimeRangeRule(purchaseTime as PurchaseTime);
                 expect(points).toEqual(expected);
             },
         );

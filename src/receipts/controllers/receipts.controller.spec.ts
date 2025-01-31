@@ -15,7 +15,7 @@ const MOCK_ITEM: Item = {
 } as const;
 const MOCK_RECEIPT: CreateReceiptDto = {
     retailer: 'M&M Corner Market',
-    purchaseDate: new Date('03-20-2022'),
+    purchaseDate: '2022-03-20',
     purchaseTime: '14:33',
     items: [MOCK_ITEM, MOCK_ITEM, MOCK_ITEM, MOCK_ITEM],
     total: 9.0,

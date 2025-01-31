@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
+    ApiBody,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
+    ApiParam,
+    ApiResponse,
 } from '@nestjs/swagger';
-import type { ParameterObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
 import {
     INVALID_RECEIPT,
@@ -24,11 +26,14 @@ export class ReceiptsController {
         private readonly pointsService: PointsService,
     ) {}
 
+    // NOTE: Successful POST requests should return 201, but the original spec
+    //       specifies 200..
+    @HttpCode(HttpStatus.OK)
     @ApiOperation({
         summary: 'Submits a receipt for processing.',
         description: 'Submits a receipt for processing.',
     })
-    @ApiOkResponse({
+    @ApiResponse({
         description: 'Returns the ID assigned to the receipt.',
         schema: {
             type: 'object',
@@ -42,6 +47,7 @@ export class ReceiptsController {
             },
         },
     })
+    @ApiBody({ type: CreateReceiptDto })
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
     processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
@@ -53,19 +59,8 @@ export class ReceiptsController {
     @ApiOperation({
         summary: 'Returns the points awarded for the receipt.',
         description: 'Returns the points awarded for the receipt.',
-        parameters: [
-            {
-                name: 'id',
-                in: 'path',
-                required: true,
-                description: 'The ID of the receipt.',
-                schema: {
-                    type: 'string',
-                    pattern: '^\\S+$',
-                },
-            },
-        ] as ParameterObject[],
     })
+    @ApiParam({ name: 'id', required: true, description: 'The ID of the receipt.' })
     @ApiOkResponse({
         description: 'The number of points awarded.',
         schema: {

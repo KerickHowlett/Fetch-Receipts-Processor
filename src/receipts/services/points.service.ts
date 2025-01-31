@@ -107,8 +107,7 @@ export class PointsService {
      * @returns the score of the purchase date
      */
     applyPurchaseDateDayRule(purchaseDate: Receipt['purchaseDate']): number {
-        const day = purchaseDate.getDate();
-        console.log(day);
+        const day = +purchaseDate.split('-')[2];
 
         const isDayEvenNumber = day % 2 === 0;
         if (isDayEvenNumber) {
