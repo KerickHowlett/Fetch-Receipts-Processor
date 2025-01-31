@@ -76,6 +76,7 @@ const MOCK_RECEIPTS = [
 
 const DOMAIN = 'http://localhost:4000/api' as const;
 const POST_ENDPOINT = `${DOMAIN}/receipts/process` as const;
+const EXPECTED_ERROR = 'total must be a number conforming to the specified constraints' as const;
 
 describe('Receipts', () => {
     describe(`POST /api/receipts/process`, () => {
@@ -95,12 +96,13 @@ describe('Receipts', () => {
         );
 
         it('should return 400 if receipt is invalid', async () => {
-            expect.assertions(1);
+            expect.assertions(2);
 
             try {
                 await axios.post(POST_ENDPOINT, { ...MOCK_RECEIPTS[0], total: 'invalid' });
             } catch (error) {
                 expect(error.response.status).toBe(HttpStatus.BAD_REQUEST);
+                expect(error.response.data.message[0]).toBe(EXPECTED_ERROR);
             }
         });
     });
@@ -135,11 +137,12 @@ describe('Receipts', () => {
         });
 
         it('should return 404 if receipt does not exist', async () => {
-            expect.assertions(1);
+            expect.assertions(2);
             try {
                 await axios.get(`${DOMAIN}/receipts/invalid-id/points`);
             } catch (error) {
                 expect(error.response.status).toBe(HttpStatus.NOT_FOUND);
+                expect(error.response.data.message).toBe('No receipt found for that ID.');
             }
         });
     });
