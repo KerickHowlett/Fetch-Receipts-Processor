@@ -12,7 +12,6 @@ The service application implements the following REST API:
 
 | Method | URL                      | Description                              |
 |--------|--------------------------|------------------------------------------|
-| GET    | /health                  | Get service health                       |
 | GET    | /api/receipts/:id/points | Get points awarded to receipt            |
 | POST   | /api/receipts/process    | Add one receipt                          |
 
