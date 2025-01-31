@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateReceiptDto } from './dto/create-receipt.dto';
-import type { Receipt } from './models/receipt.model';
-import { ReceiptsRepository } from './receipts.repository';
+import type { CreateReceiptDto } from '../dto/create-receipt.dto';
+import type { Receipt } from '../models/receipt.model';
+import type { ReceiptsRepository } from '../repositories/receipts.in-memory.repository.repository';
 
 @Injectable()
 export class ReceiptsService {

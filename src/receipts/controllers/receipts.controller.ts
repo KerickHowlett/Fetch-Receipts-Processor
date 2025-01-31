@@ -7,18 +7,18 @@ import {
 } from '@nestjs/swagger';
 import type { ParameterObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
-import {
-    INVALID_RECEIPT,
-    RECEIPT_EXISTS,
-    RECEIPT_NOT_FOUND,
-} from './constants/error-messages.const';
-import { CreateReceiptDto } from './dto/create-receipt.dto';
-import type { Receipt } from './models/receipt.model';
-import { ReceiptsService } from './receipts.service';
+import { INVALID_RECEIPT, RECEIPT_EXISTS, RECEIPT_NOT_FOUND } from '../constants/receipts.const';
+import { CreateReceiptDto } from '../dto/create-receipt.dto';
+import type { Receipt } from '../models/receipt.model';
+import type { PointsService } from '../services/points.service';
+import type { ReceiptsService } from '../services/receipts.service';
 
 @Controller('receipts')
 export class ReceiptsController {
-    constructor(private readonly receiptsService: ReceiptsService) {}
+    constructor(
+        private readonly receiptsService: ReceiptsService,
+        private readonly pointsService: PointsService,
+    ) {}
 
     @ApiOperation({
         summary: 'Submits a receipt for processing.',
@@ -88,6 +88,15 @@ export class ReceiptsController {
             throw new HttpException(RECEIPT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        return receipt;
+        let points = 0;
+        points += this.pointsService.applyRetailerNameAlphaNumCharsRule(receipt.retailer);
+        points += this.pointsService.applyRoundDollarAmountRule(receipt.total);
+        points += this.pointsService.applyCleanQuarterDividendRule(receipt.total);
+        points += this.pointsService.applyItemPairsRule(receipt.items);
+        points += this.pointsService.applyItemDescriptionsLengthRule(receipt.items);
+        points += this.pointsService.applyPurchaseDateDayRule(receipt.purchaseDate);
+        points += this.pointsService.applyPurchaseTimeRangeRule(receipt.purchaseTime);
+
+        return { points };
     }
 }
