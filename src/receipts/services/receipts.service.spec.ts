@@ -1,6 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Injectable } from '@nestjs/common';
 import { Receipt } from '../models/receipt.model';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
 import { ReceiptsService } from './receipts.service';
