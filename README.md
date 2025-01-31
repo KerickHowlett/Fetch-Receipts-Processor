@@ -1,5 +1,21 @@
 # Fetch's Receipt Processor
 
+## Overview
+
+This repository contains a demo backend server application for storing receipts
+and awarding points to them based on a predefined criteria, which can be found
+[here](https://github.com/fetch-rewards/receipt-processor-challenge?tab=readme-ov-file#rules).
+
+## Features
+
+The service application implements the following REST API:
+
+| Method | URL                      | Description                              |
+|--------|--------------------------|------------------------------------------|
+| GET    | /health                  | Get service health                       |
+| GET    | /api/receipts/:id/points | Get points awarded to receipt            |
+| POST   | /api/receipts/process    | Add one receipt                          |
+
 ## Instructions
 
 ### Run Application
