@@ -1,56 +1,44 @@
 {
-  "name": "fetch",
-  "$schema": "node_modules/nx/schemas/project-schema.json",
-  "includedScripts": [],
-  "sourceRoot": "src",
-  "projectType": "application",
-  "tags": [],
-  "targets": {
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "webpack-cli build",
-        "args": [
-          "node-env=production"
-        ]
-      },
-      "configurations": {
-        "development": {
-          "args": [
-            "node-env=development"
-          ]
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "dependsOn": [
-        "build"
-      ],
-      "options": {
-        "buildTarget": "fetch:build",
-        "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "fetch:build:development"
+    "$schema": "node_modules/nx/schemas/project-schema.json",
+    "includedScripts": [],
+    "name": "fetch",
+    "projectType": "application",
+    "sourceRoot": "src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "configurations": {
+                "development": {
+                    "args": ["node-env=development"]
+                }
+            },
+            "executor": "nx:run-commands",
+            "options": {
+                "args": ["node-env=production"],
+                "command": "webpack-cli build"
+            }
         },
-        "production": {
-          "buildTarget": "fetch:build:production"
+        "serve": {
+            "configurations": {
+                "development": {
+                    "buildTarget": "fetch:build:development"
+                },
+                "production": {
+                    "buildTarget": "fetch:build:production"
+                }
+            },
+            "defaultConfiguration": "development",
+            "dependsOn": ["build"],
+            "executor": "@nx/js:node",
+            "options": {
+                "buildTarget": "fetch:build",
+                "runBuildTargetDependencies": false
+            }
+        },
+        "test": {
+            "options": {
+                "passWithNoTests": true
+            }
         }
-      }
-    },
-    "test": {
-      "options": {
-        "passWithNoTests": true
-      }
-    },
-    "docker-build": {
-      "dependsOn": [
-        "build"
-      ],
-      "command": "docker build -f Dockerfile . -t fetch"
     }
-  }
 }
