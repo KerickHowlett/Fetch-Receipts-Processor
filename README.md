@@ -1,82 +1,63 @@
-# Fetch
+# Fetch's Receipt Processor
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Instructions
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+### Run Application
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/1iC5CoyYe7)
-
-
-## Run tasks
-
-To run the dev server for your app, use:
+Enter the following commands from this project's root directory.
 
 ```sh
-npx nx serve fetch
+docker build -t fetch-api .
+docker run -p 4000:4000 fetch-api:latest
 ```
 
-To create a production bundle:
+#### API Endpoint
+
+The local API Endpoint URL is `http://localhost:4000/api`.
+
+#### OpenAPI Specs Documentation
+
+If you wish to take a look at the OpenAPI Specs via the Swagger UI that's based
+on the one provided from the original repo, open your browser of choice and then
+enter the following URL: `http://localhost:4000/api/docs`.
+
+#### Receipts Code Location
+
+The heart of the work for the Receipts features can be found [here](./src/receipts/).
+
+### Perform Automated Tests
+
+This code contains both automated unit tests and E2E tests.
+
+The test cases were pulled from the examples provided in the original README.md
+file.
+
+If you wish to run these tests, they can be ran from within the Docker container
+by entering the following command:
 
 ```sh
-npx nx build fetch
+docker build --target "test" -t fetch-api-tests -t fetch-tests .
+docker run fetch-api-tests
 ```
 
-To see all available targets to run for a project, run:
+#### E2E Test Location
 
-```sh
-npx nx show project fetch
-```
+The E2E Test Cases can be found [here](./e2e/src/server/receipts.spec.ts).
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Other Notes
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Time Range Rule Assumption
 
-## Add new projects
+Based on the wording in the established rules regarding the time range, I treated
+the time window's bordering hours (***after*** 2:00pm and ***before*** 4:00pm)
+as ***exclusive***.
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+I created a single if-statement block that handles the boundary hours, so if my
+assumption is inaccurate, you can just comment out or outright remove it, as
+its in-line NOTE indicates.
 
-Use the plugin's generator to create new projects.
+### Post Creation HTTP Status Code
 
-To generate a new application, use:
-
-```sh
-npx nx g @nx/node:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Normally, the HTTP Status code returned after a successful POST is `201`. However,
+the `app.yml` OpenAPI specs file from the original repo declares its "OK" Status
+as `200`, so I did the same here to keep everything consistent.
