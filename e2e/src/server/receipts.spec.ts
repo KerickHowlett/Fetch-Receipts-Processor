@@ -87,7 +87,7 @@ describe('Receipts', () => {
                 try {
                     const response = await axios.post<{ id: string }>(POST_ENDPOINT, receiptBody);
 
-                    expect(response.status).toBe(HttpStatus.OK);
+                    expect(response.status).toEqual(HttpStatus.OK);
                     expect(response.data).toStrictEqual({ id: expect.any(String) });
                 } catch (error) {
                     console.log(error);
@@ -101,8 +101,8 @@ describe('Receipts', () => {
             try {
                 await axios.post(POST_ENDPOINT, { ...MOCK_RECEIPTS[0], total: 'invalid' });
             } catch (error) {
-                expect(error.response.status).toBe(HttpStatus.BAD_REQUEST);
-                expect(error.response.data.message[0]).toBe(EXPECTED_ERROR);
+                expect(error.response.status).toEqual(HttpStatus.BAD_REQUEST);
+                expect(error.response.data.message[0]).toEqual(EXPECTED_ERROR);
             }
         });
     });
@@ -132,7 +132,7 @@ describe('Receipts', () => {
 
             const response = await axios.get(`${DOMAIN}/receipts/${id}/points`);
 
-            expect(response.status).toBe(HttpStatus.OK);
+            expect(response.status).toEqual(HttpStatus.OK);
             expect(response.data).toStrictEqual({ points: expected });
         });
 
@@ -141,8 +141,8 @@ describe('Receipts', () => {
             try {
                 await axios.get(`${DOMAIN}/receipts/invalid-id/points`);
             } catch (error) {
-                expect(error.response.status).toBe(HttpStatus.NOT_FOUND);
-                expect(error.response.data.message).toBe('No receipt found for that ID.');
+                expect(error.response.status).toEqual(HttpStatus.NOT_FOUND);
+                expect(error.response.data.message).toEqual('No receipt found for that ID.');
             }
         });
     });

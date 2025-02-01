@@ -92,7 +92,7 @@ describe('ReceiptsService', () => {
 
     describe('createReceipt', () => {
         it('should create a receipt', () => {
-            expect(service.processReceipt(MOCK_RECEIPT)).toBe(MOCK_ID);
+            expect(service.processReceipt(MOCK_RECEIPT)).toEqual(MOCK_ID);
         });
     });
 

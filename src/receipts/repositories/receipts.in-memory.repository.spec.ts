@@ -39,7 +39,7 @@ describe('ReceiptsService', () => {
 
         it("should find receipt's awarded points", () => {
             const response = service.findOne(MOCK_ID);
-            expect(response).toBe(MOCK_SCORE);
+            expect(response).toEqual(MOCK_SCORE);
         });
 
         it('should not find a receipt', () => {
