@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 echo "Running lint checks..."
 npm run lint || exit 1
