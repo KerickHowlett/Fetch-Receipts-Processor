@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { RECEIPT_NOT_FOUND_EXCEPTION } from '../constants/receipts.const';
+import type { ProcessItemDto } from '../dto/process-item.dto';
 import { ProcessReceiptDto } from '../dto/process-receipt.dto';
-import type { Item } from '../models/item.model';
 import { ReceiptsService } from '../services/receipts.service';
 import { ReceiptsController } from './receipts.controller';
 
 const MOCK_SCORE = 100;
 const MOCK_RECEIPT_ID = 'RECEIPT_ID' as const;
-const MOCK_ITEM: Item = {
+const MOCK_ITEM: ProcessItemDto = {
     shortDescription: 'Gatorade',
     price: 2.25,
 } as const;

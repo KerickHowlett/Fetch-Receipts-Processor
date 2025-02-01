@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { NO_POINTS } from '../constants/receipts.const';
+import type { ProcessItemDto } from '../dto/process-item.dto';
 import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
-import type { Item } from '../models/item.model';
 
 @Injectable()
 export class PointsService {
@@ -69,7 +69,7 @@ export class PointsService {
      * @param items the list of items
      * @returns the score of the items
      */
-    applyItemPairsRule(items: ReadonlyArray<Item>): number {
+    applyItemPairsRule(items: ReadonlyArray<ProcessItemDto>): number {
         const AWARDED_POINTS_BASE = 5;
 
         const totalItemPairs = Math.floor(items.length / 2);
@@ -83,7 +83,7 @@ export class PointsService {
      * @param items the list of items
      * @returns the score of the items
      */
-    applyItemDescriptionsLengthRule(items: Item[]): number {
+    applyItemDescriptionsLengthRule(items: ProcessItemDto[]): number {
         const AWARDED_POINTS_BASE = 0.2;
 
         return items.reduce((totalPoints, item) => {

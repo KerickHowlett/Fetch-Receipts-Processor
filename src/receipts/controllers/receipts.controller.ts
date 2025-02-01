@@ -14,7 +14,9 @@ import {
     RECEIPT_NOT_FOUND,
     RECEIPT_NOT_FOUND_EXCEPTION,
 } from '../constants/receipts.const';
+import { GetPointsAwardedDto } from '../dto/get-points-awarded.dto';
 import { ProcessReceiptDto } from '../dto/process-receipt.dto';
+import { ReceiptConfirmationDto } from '../dto/receipt-confirmation.dto';
 import { ReceiptsService } from '../services/receipts.service';
 
 @Controller('receipts')
@@ -30,17 +32,7 @@ export class ReceiptsController {
     })
     @ApiResponse({
         description: 'Returns the ID assigned to the receipt.',
-        schema: {
-            type: 'object',
-            required: ['id'],
-            properties: {
-                id: {
-                    type: 'string',
-                    pattern: '^\\S+$',
-                    example: 'adb6b560-0eef-42bc-9d16-df48f30e89b2',
-                },
-            },
-        },
+        type: ReceiptConfirmationDto,
     })
     @ApiBody({ type: ProcessReceiptDto })
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
@@ -58,16 +50,7 @@ export class ReceiptsController {
     @ApiParam({ name: 'id', required: true, description: 'The ID of the receipt.' })
     @ApiOkResponse({
         description: 'The number of points awarded.',
-        schema: {
-            type: 'object',
-            properties: {
-                points: {
-                    type: 'integer',
-                    format: 'int64',
-                    example: 100,
-                },
-            },
-        },
+        type: GetPointsAwardedDto,
     })
     @ApiNotFoundResponse({ description: RECEIPT_NOT_FOUND })
     @Get(':id/points')

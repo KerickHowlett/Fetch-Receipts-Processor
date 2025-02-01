@@ -11,7 +11,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 import type { PurchaseDate, PurchaseTime } from '../types';
-import { CreateItemDto } from './create-item.dto';
+import { ProcessItemDto } from './process-item.dto';
 
 export class ProcessReceiptDto {
     @IsString()
@@ -58,9 +58,9 @@ export class ProcessReceiptDto {
     @ApiProperty({
         minimum: 1,
         required: true,
-        type: [CreateItemDto],
+        type: [ProcessItemDto],
     })
-    items: CreateItemDto[];
+    items: ProcessItemDto[];
 
     @IsNumber()
     @Type(() => Number)

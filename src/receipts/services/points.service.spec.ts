@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { NO_POINTS } from '../constants/receipts.const';
-import type { Item } from '../models/item.model';
+import type { ProcessItemDto } from '../dto/process-item.dto';
 import type { PurchaseDate, PurchaseTime } from '../types';
 import { PointsService } from './points.service';
 
@@ -95,22 +95,22 @@ describe('PointsService', () => {
     });
 
     describe('applyItemPairsRule', () => {
-        const ITEM_ONE: Item = {
+        const ITEM_ONE: ProcessItemDto = {
             shortDescription: 'Item 1',
             price: 10,
         } as const;
 
-        const ITEM_TWO: Item = {
+        const ITEM_TWO: ProcessItemDto = {
             shortDescription: 'Item 2',
             price: 20,
         } as const;
 
-        const ITEM_THREE: Item = {
+        const ITEM_THREE: ProcessItemDto = {
             shortDescription: 'Item 3',
             price: 30,
         } as const;
 
-        const ITEM_FOUR: Item = {
+        const ITEM_FOUR: ProcessItemDto = {
             shortDescription: 'Item 4',
             price: 40,
         } as const;
@@ -143,12 +143,12 @@ describe('PointsService', () => {
     });
 
     describe('applyItemDescriptionsLengthRule', () => {
-        const ITEM_WITH_NEEDED_DESCRIPTION_LENGTH: Item = {
+        const ITEM_WITH_NEEDED_DESCRIPTION_LENGTH: ProcessItemDto = {
             shortDescription: '123123123',
             price: 10,
         } as const;
 
-        const ITEM_WITHOUT_NEEDED_DESCRIPTION_LENGTH: Item = {
+        const ITEM_WITHOUT_NEEDED_DESCRIPTION_LENGTH: ProcessItemDto = {
             shortDescription: '12345',
             price: 10,
         } as const;

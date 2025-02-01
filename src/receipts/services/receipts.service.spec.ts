@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import type { ProcessItemDto } from '../dto/process-item.dto';
 import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
-import type { Item } from '../models/item.model';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
 import { PointsService } from './points.service';
 import { ReceiptsService } from './receipts.service';
@@ -37,11 +37,11 @@ class MockPointsService {
         return 25;
     }
 
-    applyItemPairsRule(_items: Item[]): number {
+    applyItemPairsRule(_items: ProcessItemDto[]): number {
         return 10;
     }
 
-    applyItemDescriptionsLengthRule(_items: Item[]): number {
+    applyItemDescriptionsLengthRule(_items: ProcessItemDto[]): number {
         return 0;
     }
 
