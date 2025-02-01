@@ -12,7 +12,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    const GLOBAL_PREFIX = 'api' as const;
+    const GLOBAL_PREFIX = 'api/v1' as const;
     app.setGlobalPrefix(GLOBAL_PREFIX);
 
     const apiDocsConfig = new DocumentBuilder()
@@ -21,7 +21,7 @@ async function bootstrap() {
         .setVersion('1.0.0')
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, apiDocsConfig);
-    SwaggerModule.setup('api/docs', app, documentFactory);
+    SwaggerModule.setup(`${GLOBAL_PREFIX}/docs`, app, documentFactory);
 
     app.useGlobalPipes(
         new ValidationPipe({

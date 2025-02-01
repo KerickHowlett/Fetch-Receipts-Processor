@@ -74,12 +74,12 @@ const MOCK_RECEIPTS = [
     },
 ] as const;
 
-const DOMAIN = 'http://localhost:4000/api' as const;
+const DOMAIN = 'http://localhost:4000/api/v1' as const;
 const POST_ENDPOINT = `${DOMAIN}/receipts/process` as const;
 const EXPECTED_ERROR = 'total must be a number conforming to the specified constraints' as const;
 
 describe('Receipts', () => {
-    describe(`POST /api/receipts/process`, () => {
+    describe(`POST /api/v1/receipts/process`, () => {
         it.each(MOCK_RECEIPTS)(
             'should return with the id after saving receipt',
             async (receiptBody) => {

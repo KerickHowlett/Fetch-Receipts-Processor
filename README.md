@@ -12,8 +12,8 @@ The service application implements the following REST API:
 
 | Method | URL                      | Description                              |
 |--------|--------------------------|------------------------------------------|
-| GET    | /api/receipts/:id/points | Get points awarded to receipt            |
-| POST   | /api/receipts/process    | Add one receipt                          |
+| GET    | /api/v1/receipts/:id/points | Get points awarded to receipt            |
+| POST   | /api/v1/receipts/process    | Add one receipt                          |
 
 ## Instructions
 
@@ -28,13 +28,13 @@ docker run -p 4000:4000 fetch-api:latest
 
 #### API Endpoint
 
-The local API Endpoint URL is `http://localhost:4000/api`.
+The local API Endpoint URL is `http://localhost:4000/api/v1`.
 
 #### OpenAPI Specs Documentation
 
 If you wish to take a look at the OpenAPI Specs via the Swagger UI that's based
 on the one provided from the original repo, open your browser of choice and then
-enter the following URL: `http://localhost:4000/api/docs`.
+enter the following URL: `http://localhost:4000/api/v1/docs`.
 
 #### Receipts Code Location
 
