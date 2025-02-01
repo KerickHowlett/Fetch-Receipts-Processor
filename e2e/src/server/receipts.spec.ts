@@ -111,7 +111,7 @@ describe('Receipts', () => {
         it.each([
             {
                 receipt: MOCK_RECEIPTS[0],
-                expected: 31,
+                expected: 28,
             },
             {
                 receipt: MOCK_RECEIPTS[1],

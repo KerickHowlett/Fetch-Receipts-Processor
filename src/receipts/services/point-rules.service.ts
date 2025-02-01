@@ -88,13 +88,12 @@ export class PointRulesService {
 
         return items.reduce((totalPoints, item) => {
             const itemDescriptionLength = item.shortDescription.trim().length;
-
             const isMultipleOfThree = itemDescriptionLength % 3 === 0;
             if (!isMultipleOfThree) {
                 return totalPoints;
             }
 
-            const awardedItemPoints = Math.round(itemDescriptionLength * AWARDED_POINTS_BASE);
+            const awardedItemPoints = Math.ceil(item.price * AWARDED_POINTS_BASE);
             return totalPoints + awardedItemPoints;
         }, 0);
     }
