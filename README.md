@@ -55,6 +55,12 @@ docker build --target "test" -t fetch-api-tests -t fetch-tests .
 docker run fetch-api-tests
 ```
 
+#### Windows Note
+
+If attempting to run the test stage of the Docker file on a Windows machine,
+remove the first line in this [file](./scripts/run-tests.sh) to remove the shell
+script's shebang.
+
 #### E2E Test Location
 
 The E2E Test Cases can be found [here](./e2e/src/server/receipts.spec.ts).
