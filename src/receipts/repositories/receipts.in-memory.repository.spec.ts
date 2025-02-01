@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Receipt } from '../models/receipt.model';
 import { ReceiptsRepository } from './receipts.in-memory.repository';
 
 const MOCK_ID = 'MOCK_ID' as const;
@@ -8,18 +7,7 @@ jest.mock('uuid', () => ({
     v4: () => MOCK_ID,
 }));
 
-const MOCK_RECEIPT: Omit<Receipt, 'id'> = {
-    retailer: 'Target',
-    purchaseDate: '2022-01-01',
-    purchaseTime: '12:00',
-    items: [
-        {
-            shortDescription: 'Item 1',
-            price: 10,
-        },
-    ],
-    total: 10,
-} as const;
+const MOCK_SCORE = 5;
 
 describe('ReceiptsService', () => {
     let service: ReceiptsRepository;
@@ -38,7 +26,7 @@ describe('ReceiptsService', () => {
 
     describe('create', () => {
         it('should create a receipt', () => {
-            const response = service.create(MOCK_RECEIPT);
+            const response = service.create(MOCK_SCORE);
 
             expect(response).toEqual(MOCK_ID);
         });
@@ -46,12 +34,12 @@ describe('ReceiptsService', () => {
 
     describe('findOne', () => {
         beforeEach(() => {
-            service.create(MOCK_RECEIPT);
+            service.create(MOCK_SCORE);
         });
 
         it('should find a receipt', () => {
             const response = service.findOne(MOCK_ID);
-            expect(response).toStrictEqual({ id: MOCK_ID, ...MOCK_RECEIPT } as const);
+            expect(response).toBe(MOCK_SCORE);
         });
     });
 });

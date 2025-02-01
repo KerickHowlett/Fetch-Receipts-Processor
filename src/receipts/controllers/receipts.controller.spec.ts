@@ -3,11 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RECEIPT_NOT_FOUND_EXCEPTION } from '../constants/receipts.const';
 import { CreateReceiptDto } from '../dto/create-receipt.dto';
 import type { Item } from '../models/item.model';
-import type { Receipt } from '../models/receipt.model';
-import { PointsService } from '../services/points.service';
 import { ReceiptsService } from '../services/receipts.service';
 import { ReceiptsController } from './receipts.controller';
 
+const MOCK_SCORE = 100;
 const MOCK_RECEIPT_ID = 'RECEIPT_ID' as const;
 const MOCK_ITEM: Item = {
     shortDescription: 'Gatorade',
@@ -22,43 +21,12 @@ const MOCK_RECEIPT: CreateReceiptDto = {
 } as const;
 
 class MockReceiptService {
-    createReceipt(_createReceiptDto: CreateReceiptDto): Receipt['id'] {
+    processReceipt(_createReceiptDto: CreateReceiptDto): string {
         return MOCK_RECEIPT_ID;
     }
 
-    findOneReceipt(id: Receipt['id']): Receipt | undefined {
-        if (id !== MOCK_RECEIPT_ID) return;
-        return { id: MOCK_RECEIPT_ID, ...MOCK_RECEIPT } as const;
-    }
-}
-
-class MockPointsService {
-    applyRetailerNameAlphaNumCharsRule(_retailer: string): number {
-        return 14;
-    }
-
-    applyRoundDollarAmountRule(_total: number): number {
-        return 50;
-    }
-
-    applyCleanQuarterDividendRule(_total: number): number {
-        return 25;
-    }
-
-    applyItemPairsRule(_items: Item[]): number {
-        return 10;
-    }
-
-    applyItemDescriptionsLengthRule(_items: Item[]): number {
-        return 0;
-    }
-
-    applyPurchaseDateDayRule(_purchaseDate: Date): number {
-        return 0;
-    }
-
-    applyPurchaseTimeRangeRule(_purchaseTime: string): number {
-        return 10;
+    findScoreById(id: string): number | undefined {
+        return id === MOCK_RECEIPT_ID ? MOCK_SCORE : undefined;
     }
 }
 
@@ -68,10 +36,7 @@ describe('ReceiptsController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [ReceiptsController],
-            providers: [
-                { provide: PointsService, useClass: MockPointsService },
-                { provide: ReceiptsService, useClass: MockReceiptService },
-            ],
+            providers: [{ provide: ReceiptsService, useClass: MockReceiptService }],
         }).compile();
 
         controller = module.get<ReceiptsController>(ReceiptsController);
@@ -91,7 +56,7 @@ describe('ReceiptsController', () => {
     describe('getPointsAwarded', () => {
         it('should get points awarded', () => {
             const response = controller.getPointsAwarded(MOCK_RECEIPT_ID);
-            expect(response).toStrictEqual({ points: 109 });
+            expect(response).toStrictEqual({ points: MOCK_SCORE });
         });
 
         it('should throw error if receipt not found', () => {

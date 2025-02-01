@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Receipt } from '../models/receipt.model';
+import type { Item } from '../models/item.model';
+import type { Receipt } from '../models/receipt.model';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
+import { PointsService } from './points.service';
 import { ReceiptsService } from './receipts.service';
 
+const MOCK_SCORE = 10;
 const MOCK_ID = 'ID' as const;
 
-const MOCK_RECEIPT: Omit<Receipt, 'id'> = {
+const MOCK_RECEIPT: Receipt = {
     retailer: 'Wall-mart',
     purchaseDate: '2024-01-01',
     purchaseTime: '13:00',
@@ -21,13 +24,44 @@ const MOCK_RECEIPT: Omit<Receipt, 'id'> = {
 } as const;
 
 @Injectable()
+class MockPointsService {
+    applyRetailerNameAlphaNumCharsRule(_retailer: string): number {
+        return 14;
+    }
+
+    applyRoundDollarAmountRule(_total: number): number {
+        return 50;
+    }
+
+    applyCleanQuarterDividendRule(_total: number): number {
+        return 25;
+    }
+
+    applyItemPairsRule(_items: Item[]): number {
+        return 10;
+    }
+
+    applyItemDescriptionsLengthRule(_items: Item[]): number {
+        return 0;
+    }
+
+    applyPurchaseDateDayRule(_purchaseDate: Date): number {
+        return 0;
+    }
+
+    applyPurchaseTimeRangeRule(_purchaseTime: string): number {
+        return 10;
+    }
+}
+
+@Injectable()
 class MockReceiptsRepository {
-    create(_receipt: Omit<Receipt, 'id'>): Receipt['id'] | undefined {
+    create(_receipt: Receipt): string | undefined {
         return MOCK_ID;
     }
 
-    findOne(_id: Receipt['id']): Receipt | undefined {
-        return { id: MOCK_ID, ...MOCK_RECEIPT };
+    findOne(_id: string): number | undefined {
+        return MOCK_SCORE;
     }
 }
 
@@ -42,6 +76,10 @@ describe('ReceiptsService', () => {
                     provide: ReceiptsRepository,
                     useClass: MockReceiptsRepository,
                 },
+                {
+                    provide: PointsService,
+                    useClass: MockPointsService,
+                },
             ],
         }).compile();
 
@@ -54,13 +92,13 @@ describe('ReceiptsService', () => {
 
     describe('createReceipt', () => {
         it('should create a receipt', () => {
-            expect(service.createReceipt(MOCK_RECEIPT)).toBe(MOCK_ID);
+            expect(service.processReceipt(MOCK_RECEIPT)).toBe(MOCK_ID);
         });
     });
 
     describe('getReceipt', () => {
         it('should get a receipt', () => {
-            expect(service.findOneReceipt(MOCK_ID)).toStrictEqual({ id: MOCK_ID, ...MOCK_RECEIPT });
+            expect(service.findScoreById(MOCK_ID)).toEqual(MOCK_SCORE);
         });
     });
 });

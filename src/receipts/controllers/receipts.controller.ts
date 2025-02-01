@@ -15,19 +15,14 @@ import {
     RECEIPT_NOT_FOUND_EXCEPTION,
 } from '../constants/receipts.const';
 import { CreateReceiptDto } from '../dto/create-receipt.dto';
-import type { Receipt } from '../models/receipt.model';
-import { PointsService } from '../services/points.service';
 import { ReceiptsService } from '../services/receipts.service';
 
 @Controller('receipts')
 export class ReceiptsController {
-    constructor(
-        private readonly receiptsService: ReceiptsService,
-        private readonly pointsService: PointsService,
-    ) {}
+    constructor(private readonly receiptsService: ReceiptsService) {}
 
     // NOTE: Successful POST requests should return 201, but the original spec
-    //       specifies 200..
+    //       specifies 200.
     @HttpCode(HttpStatus.OK)
     @ApiOperation({
         summary: 'Submits a receipt for processing.',
@@ -51,7 +46,7 @@ export class ReceiptsController {
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
     processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
-        const id = this.receiptsService.createReceipt(createReceiptDto);
+        const id = this.receiptsService.processReceipt(createReceiptDto);
 
         return { id };
     }
@@ -76,22 +71,13 @@ export class ReceiptsController {
     })
     @ApiNotFoundResponse({ description: RECEIPT_NOT_FOUND })
     @Get(':id/points')
-    getPointsAwarded(@Param('id') id: Receipt['id']) {
-        const receipt = this.receiptsService.findOneReceipt(id);
+    getPointsAwarded(@Param('id') id: string) {
+        const score = this.receiptsService.findScoreById(id);
 
-        if (!receipt) {
+        if (!score) {
             throw RECEIPT_NOT_FOUND_EXCEPTION;
         }
 
-        let points = 0;
-        points += this.pointsService.applyRetailerNameAlphaNumCharsRule(receipt.retailer);
-        points += this.pointsService.applyRoundDollarAmountRule(receipt.total);
-        points += this.pointsService.applyCleanQuarterDividendRule(receipt.total);
-        points += this.pointsService.applyItemPairsRule(receipt.items);
-        points += this.pointsService.applyItemDescriptionsLengthRule(receipt.items);
-        points += this.pointsService.applyPurchaseDateDayRule(receipt.purchaseDate);
-        points += this.pointsService.applyPurchaseTimeRangeRule(receipt.purchaseTime);
-
-        return { points };
+        return { points: score };
     }
 }
