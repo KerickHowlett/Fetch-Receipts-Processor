@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
@@ -11,7 +11,7 @@ export class ReceiptsService {
         private readonly pointRulesService: PointRulesService,
     ) {}
 
-    processReceipt(receipt: ProcessReceiptDto): string | undefined {
+    processReceipt(receipt: ProcessReceiptDto): string {
         let points = 0;
 
         points += this.pointRulesService.applyRetailerNameAlphaNumCharsRule(receipt.retailer);
@@ -26,6 +26,12 @@ export class ReceiptsService {
     }
 
     findScoreById(id: string): number | undefined {
-        return this.receiptsRepository.findOne(id);
+        const score = this.receiptsRepository.findOne(id);
+
+        if (score === undefined) {
+            Logger.warn("receipt's awarded points were not found", id);
+        }
+
+        return score;
     }
 }

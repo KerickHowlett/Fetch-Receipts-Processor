@@ -37,9 +37,14 @@ describe('ReceiptsService', () => {
             service.create(MOCK_SCORE);
         });
 
-        it('should find a receipt', () => {
+        it("should find receipt's awarded points", () => {
             const response = service.findOne(MOCK_ID);
             expect(response).toBe(MOCK_SCORE);
+        });
+
+        it('should not find a receipt', () => {
+            const response = service.findOne('INVALID_ID');
+            expect(response).toBeUndefined();
         });
     });
 });

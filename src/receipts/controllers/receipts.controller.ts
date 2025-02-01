@@ -56,7 +56,6 @@ export class ReceiptsController {
     @Get(':id/points')
     getPointsAwarded(@Param('id') id: string) {
         const score = this.receiptsService.findScoreById(id);
-
         if (!score) {
             throw RECEIPT_NOT_FOUND_EXCEPTION;
         }
