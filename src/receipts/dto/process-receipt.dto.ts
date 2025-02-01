@@ -10,7 +10,6 @@ import {
     Matches,
     ValidateNested,
 } from 'class-validator';
-import type { PurchaseDate, PurchaseTime } from '../types';
 import { ProcessItemDto } from './process-item.dto';
 
 export class ProcessReceiptDto {
@@ -37,7 +36,7 @@ export class ProcessReceiptDto {
         required: true,
         type: 'string',
     })
-    purchaseDate: PurchaseDate;
+    purchaseDate: `${number}-${number}-${number}`;
 
     @IsString()
     @IsNotEmpty()
@@ -50,7 +49,7 @@ export class ProcessReceiptDto {
         required: true,
         type: 'string',
     })
-    purchaseTime: PurchaseTime;
+    purchaseTime: `${number}:${number}`;
 
     @IsArray()
     @ValidateNested()
