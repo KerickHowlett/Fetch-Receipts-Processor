@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { NO_POINTS } from '../constants/receipts.const';
+import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import type { Item } from '../models/item.model';
-import type { Receipt } from '../models/receipt.model';
 
 @Injectable()
 export class PointsService {
@@ -13,7 +13,7 @@ export class PointsService {
      * @param retailerName the name of the retailer
      * @returns the score of the retailer name
      */
-    applyRetailerNameAlphaNumCharsRule(retailerName: Receipt['retailer']): number {
+    applyRetailerNameAlphaNumCharsRule(retailerName: ProcessReceiptDto['retailer']): number {
         const alphaNumChars = retailerName.replace(/[^a-zA-Z0-9]/g, '');
         return alphaNumChars.length;
     }
@@ -26,7 +26,7 @@ export class PointsService {
      * @param total the total amount of the receipt
      * @returns the score of the total amount
      */
-    applyRoundDollarAmountRule(total: Receipt['total']): number {
+    applyRoundDollarAmountRule(total: ProcessReceiptDto['total']): number {
         const DECIMAL = '.' as const;
         const AWARDED_POINTS = 50;
 
@@ -50,7 +50,7 @@ export class PointsService {
      * @param total the total amount of the receipt
      * @returns the score of the total amount
      */
-    applyCleanQuarterDividendRule(total: Receipt['total']): number {
+    applyCleanQuarterDividendRule(total: ProcessReceiptDto['total']): number {
         const QUARTER = 0.25;
         const AWARDED_POINTS = 25;
 
@@ -106,7 +106,7 @@ export class PointsService {
      * @param purchaseDate the date of the purchase
      * @returns the score of the purchase date
      */
-    applyPurchaseDateDayRule(purchaseDate: Receipt['purchaseDate']): number {
+    applyPurchaseDateDayRule(purchaseDate: ProcessReceiptDto['purchaseDate']): number {
         const day = +purchaseDate.split('-')[2];
 
         const isDayEvenNumber = day % 2 === 0;
@@ -125,7 +125,7 @@ export class PointsService {
      * @param purchaseTime the time of the purchase
      * @returns the score of the purchase time
      */
-    applyPurchaseTimeRangeRule(purchaseTime: Receipt['purchaseTime']): number {
+    applyPurchaseTimeRangeRule(purchaseTime: ProcessReceiptDto['purchaseTime']): number {
         const TWO_PM = 14;
         const FOUR_PM = 16;
 

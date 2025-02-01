@@ -13,7 +13,7 @@ import {
 import type { PurchaseDate, PurchaseTime } from '../types';
 import { CreateItemDto } from './create-item.dto';
 
-export class CreateReceiptDto {
+export class ProcessReceiptDto {
     @IsString()
     @IsNotEmpty()
     @Matches(/^[\w\s\-&]+$/i)

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import type { CreateReceiptDto } from '../dto/create-receipt.dto';
+import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
 import { PointsService } from './points.service';
 
@@ -11,7 +11,7 @@ export class ReceiptsService {
         private readonly pointsService: PointsService,
     ) {}
 
-    processReceipt(receipt: CreateReceiptDto): string | undefined {
+    processReceipt(receipt: ProcessReceiptDto): string | undefined {
         let points = 0;
 
         points += this.pointsService.applyRetailerNameAlphaNumCharsRule(receipt.retailer);

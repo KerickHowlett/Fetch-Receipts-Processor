@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import type { Item } from '../models/item.model';
-import type { Receipt } from '../models/receipt.model';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
 import { PointsService } from './points.service';
 import { ReceiptsService } from './receipts.service';
@@ -10,7 +10,7 @@ import { ReceiptsService } from './receipts.service';
 const MOCK_SCORE = 10;
 const MOCK_ID = 'ID' as const;
 
-const MOCK_RECEIPT: Receipt = {
+const MOCK_RECEIPT: ProcessReceiptDto = {
     retailer: 'Wall-mart',
     purchaseDate: '2024-01-01',
     purchaseTime: '13:00',
@@ -56,7 +56,7 @@ class MockPointsService {
 
 @Injectable()
 class MockReceiptsRepository {
-    create(_receipt: Receipt): string | undefined {
+    create(_receipt: ProcessReceiptDto): string | undefined {
         return MOCK_ID;
     }
 

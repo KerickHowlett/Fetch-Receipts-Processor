@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { RECEIPT_NOT_FOUND_EXCEPTION } from '../constants/receipts.const';
-import { CreateReceiptDto } from '../dto/create-receipt.dto';
+import { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import type { Item } from '../models/item.model';
 import { ReceiptsService } from '../services/receipts.service';
 import { ReceiptsController } from './receipts.controller';
@@ -12,7 +12,7 @@ const MOCK_ITEM: Item = {
     shortDescription: 'Gatorade',
     price: 2.25,
 } as const;
-const MOCK_RECEIPT: CreateReceiptDto = {
+const MOCK_RECEIPT: ProcessReceiptDto = {
     retailer: 'M&M Corner Market',
     purchaseDate: '2022-03-20',
     purchaseTime: '14:33',
@@ -21,7 +21,7 @@ const MOCK_RECEIPT: CreateReceiptDto = {
 } as const;
 
 class MockReceiptService {
-    processReceipt(_createReceiptDto: CreateReceiptDto): string {
+    processReceipt(_createReceiptDto: ProcessReceiptDto): string {
         return MOCK_RECEIPT_ID;
     }
 

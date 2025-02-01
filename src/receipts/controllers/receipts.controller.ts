@@ -14,7 +14,7 @@ import {
     RECEIPT_NOT_FOUND,
     RECEIPT_NOT_FOUND_EXCEPTION,
 } from '../constants/receipts.const';
-import { CreateReceiptDto } from '../dto/create-receipt.dto';
+import { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import { ReceiptsService } from '../services/receipts.service';
 
 @Controller('receipts')
@@ -42,10 +42,10 @@ export class ReceiptsController {
             },
         },
     })
-    @ApiBody({ type: CreateReceiptDto })
+    @ApiBody({ type: ProcessReceiptDto })
     @ApiBadRequestResponse({ description: INVALID_RECEIPT })
     @Post('process')
-    processReceipt(@Body() createReceiptDto: CreateReceiptDto) {
+    processReceipt(@Body() createReceiptDto: ProcessReceiptDto) {
         const id = this.receiptsService.processReceipt(createReceiptDto);
 
         return { id };
