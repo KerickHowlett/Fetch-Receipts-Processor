@@ -2,18 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { NO_POINTS } from '../constants/receipts.const';
 import type { ProcessItemDto } from '../dto/process-item.dto';
-import type { PurchaseDate, PurchaseTime } from '../types';
-import { PointsService } from './points.service';
+import { PointRulesService } from './point-rules.service';
 
-describe('PointsService', () => {
-    let service: PointsService;
+describe('PointRulesService', () => {
+    let service: PointRulesService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PointsService],
+            providers: [PointRulesService],
         }).compile();
 
-        service = module.get<PointsService>(PointsService);
+        service = module.get<PointRulesService>(PointRulesService);
     });
 
     it('should be defined', () => {
@@ -196,6 +195,8 @@ describe('PointsService', () => {
     describe('applyPurchaseDateDayRule', () => {
         const AWARDED_POINTS = 6;
 
+        type TestCase = { purchaseDate: `${number}-${number}-${number}`; expected: number };
+
         it.each([
             {
                 purchaseDate: '2025-01-01',
@@ -205,14 +206,16 @@ describe('PointsService', () => {
                 purchaseDate: '2025-01-02',
                 expected: NO_POINTS,
             },
-        ])('', ({ purchaseDate, expected }) => {
-            const points = service.applyPurchaseDateDayRule(purchaseDate as PurchaseDate);
+        ] as TestCase[])('', ({ purchaseDate, expected }) => {
+            const points = service.applyPurchaseDateDayRule(purchaseDate);
             expect(points).toEqual(expected);
         });
     });
 
     describe('applyPurchaseTimeRangeRule', () => {
         const AWARDED_POINTS = 10;
+
+        type TestCase = { purchaseTime: `${number}:${number}`; expected: number };
 
         it.each([
             {
@@ -239,10 +242,10 @@ describe('PointsService', () => {
                 purchaseTime: '17:00',
                 expected: NO_POINTS,
             },
-        ])(
+        ] as TestCase[])(
             'should calculate points based on whether the purchase time is within 2pm and 4pm',
             ({ purchaseTime, expected }) => {
-                const points = service.applyPurchaseTimeRangeRule(purchaseTime as PurchaseTime);
+                const points = service.applyPurchaseTimeRangeRule(purchaseTime);
                 expect(points).toEqual(expected);
             },
         );

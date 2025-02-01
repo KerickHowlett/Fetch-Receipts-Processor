@@ -5,7 +5,7 @@ import type { ProcessItemDto } from '../dto/process-item.dto';
 import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 
 @Injectable()
-export class PointsService {
+export class PointRulesService {
     /**
      * This function takes a retailer name and scores it by how many alphanumeric
      * characters it contains. This is used to calculate points for the retailer.

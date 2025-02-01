@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 
 import { ReceiptsController } from './controllers/receipts.controller';
 import { ReceiptsRepository } from './repositories/receipts.in-memory.repository';
-import { PointsService } from './services/points.service';
+import { PointRulesService } from './services/point-rules.service';
 import { ReceiptsService } from './services/receipts.service';
 
 @Module({
     controllers: [ReceiptsController],
-    providers: [ReceiptsService, PointsService, ReceiptsRepository],
+    providers: [ReceiptsService, PointRulesService, ReceiptsRepository],
 })
 export class ReceiptsModule {}

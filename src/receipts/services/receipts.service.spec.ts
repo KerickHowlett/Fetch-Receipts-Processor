@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import type { ProcessItemDto } from '../dto/process-item.dto';
 import type { ProcessReceiptDto } from '../dto/process-receipt.dto';
 import { ReceiptsRepository } from '../repositories/receipts.in-memory.repository';
-import { PointsService } from './points.service';
+import { PointRulesService } from './point-rules.service';
 import { ReceiptsService } from './receipts.service';
 
 const MOCK_SCORE = 10;
@@ -24,7 +24,7 @@ const MOCK_RECEIPT: ProcessReceiptDto = {
 } as const;
 
 @Injectable()
-class MockPointsService {
+class MockPointRulesService {
     applyRetailerNameAlphaNumCharsRule(_retailer: string): number {
         return 14;
     }
@@ -77,8 +77,8 @@ describe('ReceiptsService', () => {
                     useClass: MockReceiptsRepository,
                 },
                 {
-                    provide: PointsService,
-                    useClass: MockPointsService,
+                    provide: PointRulesService,
+                    useClass: MockPointRulesService,
                 },
             ],
         }).compile();
